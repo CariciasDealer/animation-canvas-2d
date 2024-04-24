@@ -39,21 +39,13 @@ class Circle {
         context.closePath();
     }
     update(context) {
-        //context.clearRect(0, 0, window_width, window_height);
-
         this.draw(context);
         // Si el circulo supera el margen derecho, entonces se mueve a la izquierda
-        if (this.posX + this.radius > window_width) {
+        if (this.posX + this.radius > window_width || this.posX - this.radius < 0) {
             this.dx = -this.dx;
         }
-        if (this.posX - this.radius < 0) {
-            this.dx = -this.dx;
-        }
-        if (this.posY - this.radius < 0) {
-            this.dy = -this.dy;
-        }
-        // Si el circulo supera el margen izquierdo, entonces se mueve a la derecho
-        if (this.posY + this.radius > window_height) {
+        // Si el circulo supera el margen inferior o superior, entonces se invierte la dirección vertical
+        if (this.posY + this.radius > window_height || this.posY - this.radius < 0) {
             this.dy = -this.dy;
         }
         this.posX += this.dx;
@@ -63,36 +55,23 @@ class Circle {
 }
 
 let arrayCircle = [];
-/*
-for(let i=0; i<10; i++){
 
-    let randomX = Math.random() * window_width;//pocision en x
+// Generar círculos aleatorios y agregar los al array
+for(let i = 0; i < 10; i++){
+    let randomX = Math.random() * window_width;//posicion en x
     let randomY = Math.random() * window_height;//posicion en y
     let randomRadius = Math.floor(Math.random() * 100 + 5);//Tamaño
 
-    let miCirculo=new Circle(randomX, randomY, randomRadius, '#30597a', i+1);
-    //Agrega el objeto al array 
+    let miCirculo = new Circle(randomX, randomY, randomRadius, '#30597a', 'Hola ' + (i+1), Math.random() * 5 + 1);
     arrayCircle.push(miCirculo);
-    arrayCircle[i].draw(ctx);
+}
 
-}*/
-let randomX = Math.random() * window_width;//posicion en x
-let randomY = Math.random() * window_height;//posicion en y
-let randomRadius = Math.floor(Math.random() * 100 + 5);//Tamaño
-
-
-let miCirculo = new Circle(randomX, randomY, randomRadius, '#30597a', 'Denme', 3);
-miCirculo.draw(ctx);
-let miCirculo1 = new Circle(randomX, randomY, randomRadius, "red", 'Chamba', 5);
-miCirculo1.draw(ctx);
-
-let updateCircle = function () {
-    requestAnimationFrame(updateCircle);
+// Actualizar y dibujar todos los círculos en el canvas
+let updateCircles = function () {
+    requestAnimationFrame(updateCircles);
     ctx.clearRect(0, 0, window_width, window_height);
-    miCirculo.update(ctx);
-    miCirculo1.update(ctx);
+    arrayCircle.forEach(circle => {
+        circle.update(ctx);
+    });
 };
-updateCircle();
-/*
-let miCirculo2=new Circle(100, 270, 50, 'blue', 'pachuca');
-miCirculo2.draw(ctx); */
+updateCircles();
